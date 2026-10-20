@@ -19,19 +19,16 @@
 				<span class="brand-wordmark">Legends on the Road</span>
 			</div>
 			<ul>
-				<li><a href="#home">Onze rally's</a></li>
-				<li><a href="rally-photos.html">Sfeerbeelden</a></li>
-				<li><a href="#over">Over ons</a></li>
-				
 			</ul>
-			<a class="contact-btn" href="#contact">Contact</a>
+			<button class="contact-btn" type="button" id="open-contact" aria-haspopup="dialog" aria-controls="contact-dialog">Contact</button>
 		</nav>
 
 		<div class="hero-inner">
 			<div class="hero-copy">
+				<p class="hero-welcome">Welkom bij Legends On The Roads</p>
 				<h1>Bijzondere wagens.<br><span>Onvergetelijke dagen.</span></h1>
-				<p>Dragrally's voor liefhebbers van GT's.</p>
-				<button class="primary-btn" type="button" id="open-rally-options" aria-haspopup="dialog" aria-controls="rally-options">Ontdek onze rally's <span>→</span></button>
+				<p>Dagrally's voor liefhebbers van GT wagens en oldtimers.</p>
+				<button class="primary-btn" type="button" id="open-rally-options" aria-haspopup="dialog" aria-controls="rally-options">Ontdek onze tours <span>→</span></button>
 			</div>
 		</div>
 	</header>
@@ -40,15 +37,42 @@
 		<div class="rally-options-heading">
 			<div>
 				<p class="eyebrow">ONTDEK LEGENDS ON THE ROAD</p>
-				<h2 id="rally-options-title">Waar heb je zin in?</h2>
+				<h2 id="rally-options-title">ontdek onze tours</h2>
 			</div>
 			<button class="rally-options-close" type="button" aria-label="Sluiten" data-close-rally-options>×</button>
 		</div>
-		<p>Bekijk foto's van onze rally's of ontdek de Golden Leaves Tour.</p>
+		<p>Bekijk foto's van onze first addition of ontdek de Golden Leaves Tour.</p>
 		<div class="rally-options-links">
 			<a class="primary-btn" href="rally-photos.html">Bekijk de rallyfoto's <span>→</span></a>
 			<a class="primary-btn light" href="golden-leaves-tour.html">Ontdek de Golden Leaves Tour <span>→</span></a>
 		</div>
+	</dialog>
+
+	<dialog class="rally-options" id="contact-dialog" aria-labelledby="contact-dialog-title">
+		<div class="rally-options-heading">
+			<div>
+				<p class="eyebrow">LEGENDS ON THE ROAD</p>
+				<h2 id="contact-dialog-title">Neem contact op</h2>
+			</div>
+			<button class="rally-options-close" type="button" aria-label="Sluiten" data-close-contact>×</button>
+		</div>
+		<p>wil je je inschrijven voor de volgende tour?</p>
+		<p class="contact-form-note">Vul het formulier in; je e-mailprogramma opent daarna met je bericht klaar om te versturen.</p>
+		<form class="contact-form" id="contact-form">
+			<label for="contact-name">Naam</label>
+			<input id="contact-name" name="name" autocomplete="name" required>
+
+			<label for="contact-email">E-mailadres</label>
+			<input id="contact-email" name="email" type="email" autocomplete="email" required>
+
+			<label for="contact-subject">auto</label>
+			<input id="contact-subject" name="subject" required>
+
+			
+
+			<button class="primary-btn" type="submit">Verstuur bericht <span>→</span></button>
+		</form>
+		<p class="contact-email">Liever rechtstreeks mailen? <a href="mailto:info@legendsontheroad.be">info@legendsontheroad.be</a></p>
 	</dialog>
 
 	<main>
@@ -58,7 +82,6 @@
 
 		<section class="photo-gallery wrap" id="fotos" aria-labelledby="gallery-title">
 			<div class="gallery-heading">
-				<p class="eyebrow">SFEERBEELDEN</p>
 				<h2 id="gallery-title">Rally's in beeld</h2>
 				<p>Herbeleef de sfeer, de wagens en de mooie momenten onderweg.</p>
 			</div>
@@ -146,6 +169,10 @@
 				<img src="images/partners/sinjoor-makelaars.jpeg" alt="Sinjoor Makelaars">
 				<img src="images/partners/lab-classic-cars.jpeg" alt="LAB Classic Cars">
 				<img src="images/partners/certis-verzekeringen.jpeg" alt="Certis Verzekeringen">
+				<img src="images/gommaire img.jpeg" alt="gommaire">
+				<img src="images/jorestate img.jpeg" alt="jorestate">
+				<img src="images/unit-m img.jpeg" alt="unit-m">
+
 			</div>
 		</section>
 	</main>

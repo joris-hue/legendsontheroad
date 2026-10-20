@@ -127,8 +127,11 @@ a {
 
 .contact-btn {
 	padding: 12px 21px;
+	border: 0;
 	background: var(--gold);
 	color: #fff;
+	font-family: var(--sans);
+	cursor: pointer;
 	transition: background-color 180ms ease;
 }
 
@@ -148,6 +151,25 @@ a {
 
 .hero-copy {
 	max-width: 600px;
+}
+
+.hero-welcome {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin: 0 0 18px;
+	color: var(--gold-light);
+	font-size: 50px;
+	font-weight: 600;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+}
+
+.hero-welcome::before {
+	width: 28px;
+	height: 1px;
+	background: var(--gold-light);
+	content: "";
 }
 
 .hero-copy h1 {
@@ -202,7 +224,9 @@ a {
 .rally-options {
 	width: min(520px, calc(100% - 32px));
 	max-width: none;
+	max-height: calc(100vh - 32px);
 	padding: clamp(26px, 5vw, 40px);
+	overflow-y: auto;
 	border: 1px solid #ded9ce;
 	background: var(--paper-light);
 	color: var(--ink);
@@ -258,6 +282,62 @@ a {
 	color: #70716b;
 	font-size: 12px;
 	line-height: 1.6;
+}
+
+.contact-email a {
+	color: var(--ink);
+	font-weight: 600;
+	text-decoration: underline;
+	text-decoration-color: var(--gold);
+	text-underline-offset: 3px;
+}
+
+.rally-options > .contact-form-note {
+	margin-bottom: 18px;
+}
+
+.contact-form {
+	display: grid;
+	gap: 9px;
+}
+
+.contact-form label {
+	margin-top: 4px;
+	color: var(--ink);
+	font-size: 10px;
+	font-weight: 600;
+}
+
+.contact-form input,
+.contact-form textarea {
+	width: 100%;
+	padding: 10px 12px;
+	border: 1px solid #ded9ce;
+	border-radius: 0;
+	background: #fff;
+	color: var(--ink);
+	font: 12px var(--sans);
+}
+
+.contact-form textarea {
+	min-height: 100px;
+	resize: vertical;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+	border-color: var(--gold);
+	outline: 2px solid rgba(182, 154, 96, 0.2);
+}
+
+.contact-form button {
+	width: 100%;
+	margin-top: 8px;
+	text-align: left;
+}
+
+.rally-options > .contact-email {
+	margin: 16px 0 0;
 }
 
 .rally-options-links {
