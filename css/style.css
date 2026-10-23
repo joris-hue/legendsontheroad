@@ -292,6 +292,20 @@ a {
 	text-underline-offset: 3px;
 }
 
+.contact-requirements {
+	display: grid;
+	gap: 7px;
+	margin: -8px 0 18px;
+	padding-left: 20px;
+	color: #70716b;
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+.contact-requirements li::marker {
+	color: var(--gold);
+}
+
 .rally-options > .contact-form-note {
 	margin-bottom: 18px;
 }
