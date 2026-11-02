@@ -423,6 +423,7 @@ a {
 .rally-options-links .primary-btn.light {
 	border: 1px solid var(--gold);
 	color: var(--ink);
+	margin-top: 0;
 }
 
 .divider {

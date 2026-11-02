@@ -23,6 +23,10 @@ if (
 			rallyOptionsDialog.close();
 		}
 	});
+
+	if (window.location.hash === "#open-rally-options") {
+		rallyOptionsDialog.showModal();
+	}
 }
 
 if (
