@@ -8,6 +8,7 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="css/style.css">
+	<script src="js/rally-options.js" defer></script>
 	<title>Blossom Trail | Legends on the Road</title>
 </head>
 <body class="tour-page">
@@ -36,6 +37,27 @@
 				Je browser ondersteunt geen HTML-video.
 			</video>
 		</section>
+
+		<section class="blossom-contact" aria-labelledby="blossom-contact-title">
+			<div class="blossom-contact-inner wrap">
+				<p class="eyebrow">LEGENDS ON THE ROAD</p>
+				<h2 id="blossom-contact-title">Meer weten over de Blossom Trail?</h2>
+				<p class="blossom-contact-copy">Wil je graag meer te weten komen? Neem gerust contact met ons op via mail! We helpen je graag verder en geven je met plezier meer informatie.</p>
+				<button class="primary-btn" type="button" id="open-contact" aria-haspopup="dialog" aria-controls="contact-dialog">Stuur ons een mail <span>→</span></button>
+			</div>
+		</section>
 	</main>
+
+	<dialog class="rally-options" id="contact-dialog" aria-labelledby="contact-dialog-title">
+		<div class="rally-options-heading">
+			<div>
+				<p class="eyebrow">BLOSSOM TRAIL</p>
+				<h2 id="contact-dialog-title">Neem contact op</h2>
+			</div>
+			<button class="rally-options-close" type="button" aria-label="Sluiten" data-close-contact>×</button>
+		</div>
+		<p>Wil je graag meer te weten komen over de Blossom Trail? Stuur ons gerust een e-mail. We helpen je graag verder.</p>
+		<p class="contact-email">Mail ons via <a href="mailto:info@legendsontheroad.be">info@legendsontheroad.be</a>.</p>
+	</dialog>
 </body>
 </html>
