@@ -13,10 +13,13 @@ if (gallery instanceof HTMLElement && controls instanceof HTMLElement) {
 		const photoDirectory = gallery.dataset.photoDirectory || "images/rally-gallery";
 		const photoAlt = gallery.dataset.photoAlt || "Rallyfoto";
 		const photoPadding = gallery.dataset.photoDirectory ? 3 : 2;
+		const photoVersion = gallery.dataset.photoVersion
+			? `?v=${encodeURIComponent(gallery.dataset.photoVersion)}`
+			: "";
 		slides = Array.from({ length: photoCount }, (_, index) => {
 			const photoNumber = String(index + 1).padStart(photoPadding, "0");
 			const image = document.createElement("img");
-			image.src = `${photoDirectory}/photo-${photoNumber}.jpeg`;
+			image.src = `${photoDirectory}/photo-${photoNumber}.jpeg${photoVersion}`;
 			image.alt = `${photoAlt} ${index + 1}`;
 			image.loading = "lazy";
 			image.decoding = "async";

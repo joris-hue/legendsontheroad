@@ -500,6 +500,10 @@ a {
 	object-fit: cover;
 }
 
+.tour-page .gallery-grid img {
+	object-fit: contain;
+}
+
 .gallery-grid img.is-active {
 	display: block;
 	animation: gallery-fade-in 280ms ease-out;
