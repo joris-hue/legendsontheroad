@@ -10,11 +10,14 @@ if (gallery instanceof HTMLElement && controls instanceof HTMLElement) {
 			throw new Error("De fotogalerij heeft een ongeldig aantal foto's.");
 		}
 
+		const photoDirectory = gallery.dataset.photoDirectory || "images/rally-gallery";
+		const photoAlt = gallery.dataset.photoAlt || "Rallyfoto";
+		const photoPadding = gallery.dataset.photoDirectory ? 3 : 2;
 		slides = Array.from({ length: photoCount }, (_, index) => {
-			const photoNumber = String(index + 1).padStart(2, "0");
+			const photoNumber = String(index + 1).padStart(photoPadding, "0");
 			const image = document.createElement("img");
-			image.src = `images/rally-gallery/photo-${photoNumber}.jpeg`;
-			image.alt = `Rallyfoto ${index + 1}`;
+			image.src = `${photoDirectory}/photo-${photoNumber}.jpeg`;
+			image.alt = `${photoAlt} ${index + 1}`;
 			image.loading = "lazy";
 			image.decoding = "async";
 			gallery.append(image);
