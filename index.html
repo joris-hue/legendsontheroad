@@ -3,155 +3,139 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Legends on the Road — bijzondere rally’s voor liefhebbers van oldtimers en GT’s.">
+	<meta name="description" content="Mooie wegen, bijzondere mensen en blijvende herinneringen. Ontdek de rally's van Legends on the Road.">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="css/style.css">
-	<script src="js/gallery.js" defer></script>
-	<script src="js/rally-options.js?v=2" defer></script>
-	<title>Legends on the Road</title>
+	<title>Legends on the Road — Drive. Connect. Remember.</title>
 </head>
 <body class="home-page">
-	<header class="site-header" id="home">
-		<nav class="site-navigation" aria-label="Hoofdnavigatie">
-			<div class="brand" aria-label="Legends on the Road">
-				<span class="brand-wordmark">Legends on the Road</span>
-			</div>
-			<button class="contact-btn" type="button" id="open-contact" aria-haspopup="dialog" aria-controls="contact-dialog">Contact</button>
+	<header class="home-header" id="top">
+		<a class="home-brand" href="#top" aria-label="Legends on the Road startpagina">
+			<span>Legends on the Road</span>
+			<small>Drive – Connect – Remember</small>
+		</a>
+		<nav class="home-navigation" aria-label="Hoofdnavigatie">
+			<a href="#verhaal">Ons verhaal</a>
+			<a href="#rally">Volgende avontuur</a>
+			<a href="vorige-rallys.html">Mooie herinneringen</a>
+			<a href="#beleving">De beleving</a>
+			<a href="#partners">Partner worden</a>
+			<a class="home-contact-link" href="#contact">Contact <span aria-hidden="true">›</span></a>
 		</nav>
-
-		<div class="hero-inner">
-			<div class="hero-copy">
-				<p class="hero-welcome">Welkom bij Legends on the Road</p>
-				<h1>Bijzondere wagens.<br><span>Onvergetelijke dagen.</span></h1>
-				<p>Dagrally's voor liefhebbers van GT-wagens en oldtimers.</p>
-				<button class="primary-btn" type="button" id="open-rally-options" aria-haspopup="dialog" aria-controls="rally-options">Ontdek onze tours <span>→</span></button>
-			</div>
-		</div>
-		<p class="hero-tagline">DRIVE<span class="hero-tagline-dash">-</span>CONNECT<span class="hero-tagline-dash">-</span>REMEMBER</p>
 	</header>
 
-	<dialog class="rally-options" id="rally-options" aria-labelledby="rally-options-title">
-		<div class="rally-options-heading">
-			<div>
-				
-				<h2 id="rally-options-title">Ontdek onze tours</h2>
-			</div>
-			<button class="rally-options-close" type="button" aria-label="Sluiten" data-close-rally-options>×</button>
-		</div>
-		
-		<div class="rally-options-links">
-			<a class="primary-btn blossom-trail-btn" href="blossom-trail.html">Ontdek de Blossom Trail <span>→</span></a>
-			<a class="primary-btn" href="golden-leaves-tour.html"> de Golden Leaves Tour <span>→</span></a>
-			<a class="primary-btn light" href="rally-photos.html">First Edition <span>→</span></a>
-		</div>
-	</dialog>
-
-	<dialog class="rally-options" id="contact-dialog" aria-labelledby="contact-dialog-title">
-		<div class="rally-options-heading">
-			<div>
-				<p class="eyebrow">LEGENDS ON THE ROAD</p>
-				<h2 id="contact-dialog-title">Neem contact op</h2>
-			</div>
-			<button class="rally-options-close" type="button" aria-label="Sluiten" data-close-contact>×</button>
-		</div>
-		<p>Heb je vragen over de Golden Leaves Tour of een volgende editie? Stuur ons gerust een e-mail. Vermeld in je bericht:</p>
-		<ul class="contact-requirements">
-			<li>Naam</li>
-			<li>E-mailadres</li>
-			<li>Auto</li>
-		</ul>
-		<p class="contact-email">Mail je gegevens naar <a href="mailto:info@legendsontheroad.be">info@legendsontheroad.be</a>.</p>
-	</dialog>
-
 	<main>
-		<div class="divider wrap">
-			<span>DRIVE · CONNECT · REMEMBER</span>
-		</div>
-
-		<section class="photo-gallery wrap" id="fotos" aria-labelledby="gallery-title">
-			<div class="gallery-heading">
-				<h2 id="gallery-title">Rally's in beeld</h2>
-				<p>Herbeleef de sfeer, de wagens en de mooie momenten onderweg.</p>
+		<section class="home-hero" aria-labelledby="home-title">
+			<div class="home-hero-inner">
+				<p class="home-eyebrow">Voor liefhebbers van oldtimers &amp; GT’s</p>
+				<h1 id="home-title">Mooie wegen.<br>Bijzondere mensen.<br><em>Blijvende herinneringen.</em></h1>
+				<p class="home-hero-copy">Een gedeelde passie brengt ons samen.<br>De weg maakt er een verhaal van.</p>
+				<a class="home-button" href="#rally">Ontdek ons volgende avontuur <span aria-hidden="true">›</span></a>
 			</div>
-			<div class="gallery-grid" role="group" aria-label="Fotoreeks; gebruik de knoppen of pijltjestoetsen om foto's te bekijken">
-				<img src="images/rally-gallery/photo-01.jpeg" alt="Rallyfoto 1" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-02.jpeg" alt="Rallyfoto 2" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-03.jpeg" alt="Rallyfoto 3" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-04.jpeg" alt="Rallyfoto 4" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-05.jpeg" alt="Rallyfoto 5" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-06.jpeg" alt="Rallyfoto 6" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-07.jpeg" alt="Rallyfoto 7" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-08.jpeg" alt="Rallyfoto 8" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-09.jpeg" alt="Rallyfoto 9" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-10.jpeg" alt="Rallyfoto 10" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-11.jpeg" alt="Rallyfoto 11" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-12.jpeg" alt="Rallyfoto 12" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-13.jpeg" alt="Rallyfoto 13" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-14.jpeg" alt="Rallyfoto 14" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-15.jpeg" alt="Rallyfoto 15" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-16.jpeg" alt="Rallyfoto 16" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-17.jpeg" alt="Rallyfoto 17" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-18.jpeg" alt="Rallyfoto 18" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-19.jpeg" alt="Rallyfoto 19" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-20.jpeg" alt="Rallyfoto 20" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-21.jpeg" alt="Rallyfoto 21" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-22.jpeg" alt="Rallyfoto 22" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-23.jpeg" alt="Rallyfoto 23" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-24.jpeg" alt="Rallyfoto 24" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-25.jpeg" alt="Rallyfoto 25" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-26.jpeg" alt="Rallyfoto 26" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-27.jpeg" alt="Rallyfoto 27" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-28.jpeg" alt="Rallyfoto 28" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-29.jpeg" alt="Rallyfoto 29" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-30.jpeg" alt="Rallyfoto 30" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-31.jpeg" alt="Rallyfoto 31" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-32.jpeg" alt="Rallyfoto 32" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-33.jpeg" alt="Rallyfoto 33" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-34.jpeg" alt="Rallyfoto 34" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-35.jpeg" alt="Rallyfoto 35" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-36.jpeg" alt="Rallyfoto 36" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-37.jpeg" alt="Rallyfoto 37" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-38.jpeg" alt="Rallyfoto 38" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-39.jpeg" alt="Rallyfoto 39" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-40.jpeg" alt="Rallyfoto 40" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-41.jpeg" alt="Rallyfoto 41" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-42.jpeg" alt="Rallyfoto 42" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-43.jpeg" alt="Rallyfoto 43" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-44.jpeg" alt="Rallyfoto 44" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-45.jpeg" alt="Rallyfoto 45" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-46.jpeg" alt="Rallyfoto 46" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-47.jpeg" alt="Rallyfoto 47" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-48.jpeg" alt="Rallyfoto 48" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-49.jpeg" alt="Rallyfoto 49" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-50.jpeg" alt="Rallyfoto 50" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-51.jpeg" alt="Rallyfoto 51" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-52.jpeg" alt="Rallyfoto 52" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-53.jpeg" alt="Rallyfoto 53" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-54.jpeg" alt="Rallyfoto 54" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-55.jpeg" alt="Rallyfoto 55" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-56.jpeg" alt="Rallyfoto 56" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-57.jpeg" alt="Rallyfoto 57" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-58.jpeg" alt="Rallyfoto 58" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-59.jpeg" alt="Rallyfoto 59" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-60.jpeg" alt="Rallyfoto 60" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-61.jpeg" alt="Rallyfoto 61" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-62.jpeg" alt="Rallyfoto 62" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-63.jpeg" alt="Rallyfoto 63" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-64.jpeg" alt="Rallyfoto 64" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-65.jpeg" alt="Rallyfoto 65" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-66.jpeg" alt="Rallyfoto 66" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-67.jpeg" alt="Rallyfoto 67" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-68.jpeg" alt="Rallyfoto 68" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-69.jpeg" alt="Rallyfoto 69" loading="lazy" decoding="async">
-				<img src="images/rally-gallery/photo-70.jpeg" alt="Rallyfoto 70" loading="lazy" decoding="async">
+			<div class="home-hero-foot" aria-label="Legends on the Road, België. Een dag om naar uit te kijken.">
+				<span>Legends on the Road · België</span>
+				<span>Een dag om naar uit te kijken</span>
 			</div>
-			<div class="gallery-controls" aria-label="Slideshow bediening"></div>
 		</section>
 
-		
+		<div class="home-ribbon">
+			<p><span>De volgende bestemming</span><span class="ribbon-divider" aria-hidden="true">/</span> Blossom Trail · 1 mei 2027</p>
+			<a href="#rally">Inschrijvingen openen op 1 december <span aria-hidden="true">›</span></a>
+		</div>
 
+		<section class="home-intro home-section" id="verhaal" aria-labelledby="story-title">
+			<div>
+				<p class="home-eyebrow">Geboren uit een gedeelde passie</p>
+				<h2 id="story-title">Onze passie.<br>Jullie volgende<br>mooie herinnering.</h2>
+			</div>
+			<div class="home-copy">
+				<p>Legends on the Road is ontstaan uit onze liefde voor bijzondere auto’s, mooie routes en mensen samenbrengen. Die passie delen we graag met jullie.</p>
+				<p>We trekken eropuit met oldtimers en GT’s, nemen de tijd om te genieten en ontmoeten elkaar onderweg. Van het eerste gesprek bij de start tot het napraten aan tafel: het zijn de momenten samen die een rally onvergetelijk maken.</p>
+				<p class="home-signature">Cindy &amp; Bart</p>
+			</div>
+		</section>
+
+		<section class="home-event home-section" id="rally" aria-labelledby="rally-title">
+			<div class="home-event-image">
+				<img src="images/blossom-trail-poster.png" alt="Blossom Trail — 1 mei 2027, save the date" loading="lazy" decoding="async">
+			</div>
+			<div class="home-event-content">
+				<p class="home-eyebrow">Een nieuw seizoen. Een nieuw verhaal.</p>
+				<h2 id="rally-title">Blossom Trail</h2>
+				<p class="home-copy">Sommige bestemmingen houden we nog even voor onszelf.<br>Op 1 mei nemen we je mee in een nieuw hoofdstuk van Legends on the Road. De lente vormt het decor. Waar de weg ons brengt? Dat blijft nog even een verrassing.</p>
+				<p class="home-copy">Een tipje van de sluier: het wordt een dag die je graag samen beleeft… en waar je nog lang over napraat.</p>
+				<div class="home-date">
+					<strong>01</strong>
+					<span>MEI 2027<br>Zaterdag · Save the date</span>
+				</div>
+				<p class="home-copy">Zet de datum alvast in je agenda.<br>De inschrijvingen openen op <strong>1 december 2026</strong>.</p>
+				<a class="home-button" href="contact.php?type=rally">Vraag ons meer informatie <span aria-hidden="true">›</span></a>
+				<p class="home-note">Nieuwsgierig? Binnenkort onthullen we meer…</p>
+			</div>
+		</section>
+
+		<section class="home-experience home-section" id="beleving" aria-labelledby="experience-title">
+			<p class="home-eyebrow">Drive – Connect – Remember</p>
+			<h2 id="experience-title">Het mooiste van de dag<br>beleef je samen.</h2>
+			<div class="home-pillars">
+				<article>
+					<span class="home-number">01 / Drive</span>
+					<h3>De weg ontdekken.</h3>
+					<p>Even loskomen van de dagelijkse drukte. Achter het stuur van je oldtimer of GT, met alle aandacht voor de route en het landschap.</p>
+				</article>
+				<article>
+					<span class="home-number">02 / Connect</span>
+					<h3>De passie delen.</h3>
+					<p>Bijzondere auto’s brengen mensen samen. Een gesprek bij de start, een nieuwe ontmoeting onderweg en samen genieten aan tafel.</p>
+				</article>
+				<article>
+					<span class="home-number">03 / Remember</span>
+					<h3>Het moment bewaren.</h3>
+					<p>Die ene weg. Die glimlach. Dat verhaal dat blijft hangen. Herinneringen die je mee naar huis neemt, lang nadat de motor stilvalt.</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="home-archive home-section" aria-labelledby="archive-title">
+			<div>
+				<p class="home-eyebrow">Samen geschreven verhalen</p>
+				<h2 id="archive-title">Een terugblik op<br>mooie kilometers.</h2>
+				<p class="home-copy">Van onze eerste rit naar Willemstad tot de Golden Leaves Tour.<br>Ontdek de verhalen van onze vorige rally’s.</p>
+			</div>
+			<a class="home-button" href="vorige-rallys.html">Bekijk onze mooie herinneringen <span aria-hidden="true">›</span></a>
+		</section>
+
+		<section class="home-partners home-section" id="partners" aria-labelledby="partners-title">
+			<div>
+				<p class="home-eyebrow">Word partner van Legends on the Road</p>
+				<h2 id="partners-title">Samen maken we<br>het bijzonder.</h2>
+			</div>
+			<div>
+				<p class="home-copy">Verbind jouw bedrijf aan bijzondere routes, mooie ontmoetingen en een gedeelde passie voor oldtimers en GT’s. Met de steun van onze sponsors geven we elke rally dat beetje extra.</p>
+				<p class="home-copy">Wil je mee deel uitmaken van ons verhaal? Vraag ons naar de mogelijkheden in ons sponsordossier. We bekijken graag samen welke samenwerking bij jouw bedrijf past.</p>
+				<div class="home-partner-actions">
+					<a class="home-button" href="contact.php?type=sponsor">Vraag ons sponsordossier aan <span aria-hidden="true">›</span></a>
+				</div>
+			</div>
+		</section>
+
+		<section class="home-contact home-section" id="contact" aria-labelledby="contact-title">
+			<p class="home-eyebrow">Het begint met een ontmoeting</p>
+			<h2 id="contact-title">Rijd jij de volgende keer mee?</h2>
+			<p>Een vraag over onze rally’s of interesse om partner te worden?<br>We horen graag van je.</p>
+			<a class="home-button" href="mailto:info@legendsontheroad.be">info@legendsontheroad.be <span aria-hidden="true">›</span></a>
+		</section>
 	</main>
+
+	<footer class="home-footer">
+		<a class="home-footer-brand" href="#top">Legends on the Road</a>
+		<nav aria-label="Footer navigatie">
+			<a href="https://www.instagram.com/legends.ontheroad/" target="_blank" rel="noopener noreferrer">Instagram ›</a>
+			<a href="mailto:info@legendsontheroad.be">Contact ›</a>
+		</nav>
+		<span>© 2026 Legends on the Road</span>
+	</footer>
 </body>
 </html>
