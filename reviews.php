@@ -14,6 +14,18 @@ $name = '';
 $rating = '';
 $review = '';
 $consent = false;
+$storageAvailable = false;
+$approvedReviews = [];
+
+try {
+	reviewStorageDirectory();
+	$approvedReviews = reviewApproved();
+	$storageAvailable = true;
+} catch (RuntimeException $exception) {
+	http_response_code(503);
+	$status = 'Reviews zijn tijdelijk niet beschikbaar omdat veilige serveropslag ontbreekt.';
+	error_log('Private review storage is unavailable: ' . $exception->getMessage());
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$name = trim(postedString('name'));
@@ -26,7 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$nameLength = preg_match_all('/./us', $name);
 	$reviewLength = preg_match_all('/./us', $review);
 
-	if (!$tokenIsValid) {
+	if (!$storageAvailable) {
+		http_response_code(503);
+		$status = 'Je review kan niet worden verstuurd omdat veilige serveropslag ontbreekt.';
+	} elseif (!$tokenIsValid) {
 		http_response_code(400);
 		$status = 'Je formulier is verlopen. Vernieuw de pagina en probeer het opnieuw.';
 	} elseif ($website !== '') {
@@ -50,40 +65,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		http_response_code(422);
 		$status = 'Controleer je naam, kies een score van 1 tot 5 sterren, schrijf een review van minstens 20 tekens en geef toestemming voor publicatie na goedkeuring.';
 	} else {
-		$reviewId = reviewAdd($name, (int) $rating, $review);
-		if ($reviewId === null) {
+		$stored = false;
+		try {
+			reviewAdd($name, (int) $rating, $review);
+			$stored = true;
+		} catch (RuntimeException $exception) {
 			error_log('Review could not be stored.');
 			http_response_code(503);
 			$status = 'Je review kon niet veilig worden opgeslagen. Probeer het later opnieuw.';
-		} else {
-		$body = "Er is een nieuwe review ingezonden voor Legends on the Road.\r\n\r\n" .
-			'Naam: ' . $name . "\r\n" .
-			'Score: ' . $rating . " / 5 sterren\r\n\r\n" .
-			"Review:\r\n" . str_replace("\n", "\r\n", $review);
-		$headers = [
-			'From: Legends on the Road <info@legendsontheroad.be>',
-			'MIME-Version: 1.0',
-			'Content-Type: text/plain; charset=UTF-8',
-		];
-
-		$testMode = getenv('LEGENDS_REVIEW_TEST_MODE') === '1';
-		$mailSent = $testMode
-			? true
-			: mail('info@legendsontheroad.be', 'Nieuwe review ontvangen - Legends on the Road', $body, implode("\r\n", $headers));
-
-		if ($mailSent) {
-			$_SESSION['last_review_submission'] = time();
-			$status = 'Bedankt voor je review! We beoordelen hem eerst. Na goedkeuring kunnen we hem met je naam op deze pagina delen.';
-			$sent = true;
-		} else {
-			error_log('Review form email could not be sent, but review was stored.');
-			$_SESSION['last_review_submission'] = time();
-			$status = 'Je review is veilig opgeslagen en wordt beoordeeld. De e-mailmelding kon momenteel niet worden verstuurd.';
 		}
-		$name = '';
-		$rating = '';
-		$review = '';
-		$consent = false;
+
+		if ($stored) {
+			$body = "Er is een nieuwe review ingezonden voor Legends on the Road.\r\n\r\n" .
+				'Naam: ' . $name . "\r\n" .
+				'Score: ' . $rating . " / 5 sterren\r\n\r\n" .
+				"Review:\r\n" . str_replace("\n", "\r\n", $review);
+			try {
+				$mailSent = reviewSendEmail(
+					'info@legendsontheroad.be',
+					'Nieuwe review ontvangen - Legends on the Road',
+					$body
+				);
+			} catch (RuntimeException $exception) {
+				error_log('Review notification failed: ' . $exception->getMessage());
+				$mailSent = false;
+			}
+
+			if ($mailSent) {
+				$_SESSION['last_review_submission'] = time();
+				$status = 'Bedankt voor je review! We beoordelen hem eerst. Na goedkeuring kunnen we hem met je naam op deze pagina delen.';
+				$sent = true;
+			} else {
+				error_log('Review form email could not be sent, but review was stored.');
+				$_SESSION['last_review_submission'] = time();
+				$status = 'Je review is veilig opgeslagen en wordt beoordeeld. De e-mailmelding kon momenteel niet worden verstuurd.';
+			}
+			$name = '';
+			$rating = '';
+			$review = '';
+			$consent = false;
 		}
 	}
 
@@ -137,6 +157,9 @@ function postedString(string $key): string
 			<?php if ($status !== ''): ?>
 				<p class="contact-form-status" role="status"><?= escape($status) ?></p>
 			<?php endif; ?>
+			<?php if (!$storageAvailable): ?>
+				<p class="reviews-intro">Reviewinzendingen zijn tijdelijk uitgeschakeld.</p>
+			<?php else: ?>
 			<form class="contact-form review-form" id="review-form" method="post" action="reviews.php#review-form">
 				<input type="hidden" name="csrf_token" value="<?= escape($_SESSION['review_csrf_token']) ?>">
 				<div class="contact-form-trap" aria-hidden="true">
@@ -171,13 +194,13 @@ function postedString(string $key): string
 
 				<button class="home-button" type="submit">Verstuur je review <span aria-hidden="true">›</span></button>
 			</form>
+			<?php endif; ?>
 		</section>
 
 		<section class="approved-reviews" aria-labelledby="approved-reviews-title">
 			<div>
 				<p class="home-eyebrow">Ervaringen van deelnemers</p>
 				<h2 id="approved-reviews-title">Verhalen die we samen beleven.</h2>
-				<?php $approvedReviews = reviewApproved(); ?>
 				<?php if ($approvedReviews === []): ?>
 					<p>Reviews verschijnen hier nadat ze zijn goedgekeurd. Bedankt aan iedereen die zijn of haar ervaring met ons deelt.</p>
 				<?php else: ?>

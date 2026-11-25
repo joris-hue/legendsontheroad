@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 ini_set('session.cookie_httponly', '1');
 ini_set('session.use_strict_mode', '1');
+$isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+$isLoopback = in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1'], true);
+$secureTransport = $isHttps || $isLoopback;
 if (!headers_sent()) {
 	session_set_cookie_params([
 		'lifetime' => 0,
@@ -12,6 +15,9 @@ if (!headers_sent()) {
 		'httponly' => true,
 		'samesite' => 'Strict',
 	]);
+	header('Cache-Control: no-store, private');
+	header('X-Content-Type-Options: nosniff');
+	header('Referrer-Policy: no-referrer');
 }
 session_start();
 
@@ -36,23 +42,51 @@ function ensureAdminCsrf(): string
 	return $_SESSION['review_admin_csrf'];
 }
 
-function adminConfigured(): bool
+function adminConfigured(array $admin): bool
 {
-	$data = reviewReadArray(reviewAdminFile());
-	return is_string($data['password_hash'] ?? null) && password_get_info($data['password_hash'])['algo'] !== null;
+	$hash = $admin['password_hash'] ?? null;
+	return is_string($hash) && password_get_info($hash)['algo'] !== null;
 }
 
-function writeAdminPassword(string $password): bool
+function adminChallengeForSession(array $admin): ?array
 {
-	return reviewWriteArray(reviewAdminFile(), [
-		'password_hash' => password_hash($password, PASSWORD_DEFAULT),
-		'created_at' => gmdate('Y-m-d\TH:i:s\Z'),
-	]);
+	$challenge = $admin['challenge'] ?? null;
+	if (
+		!is_array($challenge) ||
+		(int) ($challenge['expires_at'] ?? 0) <= time() ||
+		!hash_equals((string) ($challenge['session_hash'] ?? ''), hash('sha256', session_id()))
+	) {
+		return null;
+	}
+	return $challenge;
 }
 
 $status = '';
 $csrf = ensureAdminCsrf();
-$isLoggedIn = (($_SESSION['review_admin_logged_in'] ?? false) === true);
+$storageAvailable = false;
+$admin = [];
+$reviews = [];
+
+if (!$secureTransport) {
+	http_response_code(503);
+	$status = 'Beheer is alleen beschikbaar via een beveiligde HTTPS-verbinding.';
+} else {
+	try {
+		reviewStorageDirectory();
+		$admin = reviewGetAdmin();
+		$storageAvailable = true;
+	} catch (RuntimeException $exception) {
+		error_log('Private review storage is unavailable: ' . $exception->getMessage());
+		http_response_code(503);
+		$status = 'Beheer is uitgeschakeld omdat er geen veilige opslag buiten de publieke website beschikbaar is. Neem contact op met de hostingbeheerder.';
+	}
+}
+
+$configured = $storageAvailable && adminConfigured($admin);
+$isLoggedIn = $configured &&
+	(($_SESSION['review_admin_logged_in'] ?? false) === true) &&
+	is_string($admin['session_version'] ?? null) &&
+	hash_equals((string) $admin['session_version'], (string) ($_SESSION['review_admin_session_version'] ?? ''));
 
 if ($isLoggedIn) {
 	$loginTime = (int) ($_SESSION['review_admin_login_time'] ?? 0);
@@ -64,11 +98,7 @@ if ($isLoggedIn) {
 	}
 }
 
-if (!adminConfigured() && $_SERVER['REQUEST_METHOD'] === 'GET') {
-	$isLoggedIn = false;
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($storageAvailable && $_SERVER['REQUEST_METHOD'] === 'POST') {
 	$postedToken = postedAdminString('csrf_token');
 	if (!hash_equals($csrf, $postedToken)) {
 		http_response_code(403);
@@ -82,80 +112,141 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		session_destroy();
 		header('Location: review-admin.php');
 		exit;
-	} elseif (postedAdminString('action') === 'setup') {
-		$setupKey = reviewSetupKey();
-		$postedKey = postedAdminString('setup_key');
+	} elseif (postedAdminString('action') === 'request_code' && !$isLoggedIn) {
+		try {
+			$result = reviewRequestAdminCode(session_id());
+			if ($result === 'sent') {
+				$status = 'Als de e-mail bezorgd wordt, staat de eenmalige code in de inbox van info@legendsontheroad.be. De code is 10 minuten geldig.';
+			} elseif ($result === 'limited') {
+				http_response_code(429);
+				$status = 'Aanvragen zijn beperkt tot één code per minuut, drie per IP per uur en tien totaal per uur. Probeer het later opnieuw.';
+			} else {
+				http_response_code(503);
+				$status = 'De verificatie-e-mail kon niet worden verstuurd. Probeer het later opnieuw.';
+			}
+		} catch (RuntimeException $exception) {
+			error_log('Admin verification request failed: ' . $exception->getMessage());
+			http_response_code(503);
+			$status = 'Verificatie kon niet veilig worden verwerkt. Beheer is uitgeschakeld.';
+		}
+	} elseif (postedAdminString('action') === 'verify_code' && !$isLoggedIn) {
 		$password = postedAdminString('password');
 		$passwordConfirmation = postedAdminString('password_confirmation');
-
-		if (adminConfigured()) {
-			$status = 'Het beheerwachtwoord is al ingesteld.';
-		} elseif (!is_string($setupKey) || $setupKey === '' || !hash_equals($setupKey, $postedKey)) {
-			http_response_code(403);
-			$status = 'De eenmalige installatiesleutel is ongeldig.';
-		} elseif (strlen($password) < 12 || $password !== $passwordConfirmation) {
-			$status = 'Gebruik minimaal 12 tekens en voer hetzelfde wachtwoord twee keer in.';
-		} elseif (!writeAdminPassword($password)) {
-			http_response_code(503);
-			$status = 'Het wachtwoord kon niet veilig worden opgeslagen.';
+		if (strlen($password) < 14 || $password !== $passwordConfirmation) {
+			http_response_code(422);
+			$status = 'Kies een wachtwoord van minimaal 14 tekens en bevestig het correct.';
 		} else {
-			@unlink(reviewStorageDirectory() . DIRECTORY_SEPARATOR . 'setup.key');
-			$_SESSION['review_admin_logged_in'] = true;
-			$_SESSION['review_admin_login_time'] = time();
-			session_regenerate_id(true);
-			$isLoggedIn = true;
-			$status = 'Het beheerwachtwoord is ingesteld. Het installatiescherm is nu beveiligd en uitgeschakeld.';
+			try {
+				$result = reviewCompleteAdminCode(session_id(), postedAdminString('verification_code'), $password);
+				if ($result === 'setup_complete' || $result === 'password_reset') {
+					session_regenerate_id(true);
+					$_SESSION['review_admin_logged_in'] = true;
+					$_SESSION['review_admin_login_time'] = time();
+					$isLoggedIn = true;
+					$admin = reviewGetAdmin();
+					$_SESSION['review_admin_session_version'] = (string) ($admin['session_version'] ?? '');
+					$configured = true;
+					$status = $result === 'setup_complete'
+						? 'Je beheerderswachtwoord is ingesteld.'
+						: 'Je wachtwoord is opnieuw ingesteld.';
+				} elseif ($result === 'wrong_code') {
+					http_response_code(401);
+					$status = 'De code klopt niet. Controleer de e-mail en probeer opnieuw.';
+				} elseif ($result === 'expired') {
+					http_response_code(410);
+					$status = 'De code is verlopen. Vraag een nieuwe verificatiecode aan.';
+				} elseif ($result === 'attempts_exceeded') {
+					http_response_code(429);
+					$status = 'Het maximumaantal pogingen is bereikt. Vraag later een nieuwe code aan.';
+				} elseif ($result === 'weak_password') {
+					http_response_code(422);
+					$status = 'Kies een wachtwoord van minimaal 14 tekens.';
+				} else {
+					http_response_code(400);
+					$status = 'Deze verificatiecode is ongeldig of hoort niet bij deze sessie. Vraag een nieuwe code aan.';
+				}
+			} catch (RuntimeException $exception) {
+				error_log('Admin verification failed: ' . $exception->getMessage());
+				http_response_code(503);
+				$status = 'Verificatie kon niet veilig worden opgeslagen. Beheer is uitgeschakeld.';
+			}
 		}
-	} elseif (postedAdminString('action') === 'login') {
-		$lockedUntil = (int) ($_SESSION['review_admin_locked_until'] ?? 0);
-		if ($lockedUntil > time()) {
-			http_response_code(429);
-			$status = 'Te veel mislukte pogingen. Wacht een kwartier voordat je opnieuw probeert.';
-		} else {
-			$data = reviewReadArray(reviewAdminFile());
-			$hash = (string) ($data['password_hash'] ?? '');
-			if ($hash !== '' && password_verify(postedAdminString('password'), $hash)) {
+	} elseif (postedAdminString('action') === 'login' && $configured && !$isLoggedIn) {
+		try {
+			$result = reviewCheckLogin(postedAdminString('password'));
+			if ($result === 'success') {
+				session_regenerate_id(true);
 				$_SESSION['review_admin_logged_in'] = true;
 				$_SESSION['review_admin_login_time'] = time();
-				session_regenerate_id(true);
-				unset($_SESSION['review_admin_attempts'], $_SESSION['review_admin_locked_until']);
+				$admin = reviewGetAdmin();
+				$_SESSION['review_admin_session_version'] = (string) ($admin['session_version'] ?? '');
 				$isLoggedIn = true;
 				$status = 'Je bent aangemeld.';
+			} elseif ($result === 'locked') {
+				http_response_code(429);
+				$status = 'Te veel mislukte pogingen. Probeer het over 15 minuten opnieuw.';
 			} else {
-				$_SESSION['review_admin_attempts'] = (int) ($_SESSION['review_admin_attempts'] ?? 0) + 1;
-				if ((int) $_SESSION['review_admin_attempts'] >= 5) {
-					$_SESSION['review_admin_locked_until'] = time() + 900;
-				}
 				http_response_code(401);
 				$status = 'Wachtwoord ongeldig.';
 			}
+		} catch (RuntimeException $exception) {
+			error_log('Admin login failed: ' . $exception->getMessage());
+			http_response_code(503);
+			$status = 'Aanmelden kon niet veilig worden gecontroleerd. Beheer is uitgeschakeld.';
 		}
 	} elseif ($isLoggedIn) {
 		$action = postedAdminString('action');
 		$id = postedAdminString('id');
-		if (!preg_match('/\A[a-f0-9]{32}\z/', $id)) {
-			http_response_code(400);
-			$status = 'Ongeldige review.';
-		} elseif ($action === 'approve' && reviewSetStatus($id, 'approved')) {
-			$status = 'De review is goedgekeurd en wordt nu op de website getoond.';
-		} elseif ($action === 'reject' && reviewSetStatus($id, 'rejected')) {
-			$status = 'De review is geweigerd.';
-		} elseif ($action === 'delete' && reviewDelete($id)) {
-			$status = 'De review is definitief verwijderd.';
-		} else {
-			http_response_code(400);
-			$status = 'De actie kon niet worden uitgevoerd.';
+		try {
+			if (!preg_match('/\A[a-f0-9]{32}\z/', $id)) {
+				http_response_code(400);
+				$status = 'Ongeldige review.';
+			} elseif ($action === 'approve' && reviewSetStatus($id, 'approved')) {
+				$status = 'De review is goedgekeurd en wordt nu op de website getoond.';
+			} elseif ($action === 'reject' && reviewSetStatus($id, 'rejected')) {
+				$status = 'De review is geweigerd.';
+			} elseif ($action === 'delete' && reviewDelete($id)) {
+				$status = 'De review is definitief verwijderd.';
+			} else {
+				http_response_code(400);
+				$status = 'De actie kon niet worden uitgevoerd.';
+			}
+		} catch (RuntimeException $exception) {
+			error_log('Review administration action failed: ' . $exception->getMessage());
+			http_response_code(503);
+			$status = 'De wijziging kon niet veilig worden opgeslagen.';
 		}
 	} else {
 		http_response_code(401);
-		$status = 'Je moet aangemeld zijn.';
+		$status = 'Meld je aan of vraag een e-mailverificatiecode aan.';
 	}
 
 	$_SESSION['review_admin_csrf'] = bin2hex(random_bytes(32));
 	$csrf = $_SESSION['review_admin_csrf'];
+	try {
+		$admin = reviewGetAdmin();
+		$configured = adminConfigured($admin);
+	} catch (RuntimeException $exception) {
+		$storageAvailable = false;
+		$isLoggedIn = false;
+		http_response_code(503);
+		$status = 'Veilige opslag is niet beschikbaar. Beheer is uitgeschakeld.';
+	}
 }
 
-$reviews = $isLoggedIn ? reviewAll() : [];
+if ($storageAvailable && $isLoggedIn) {
+	try {
+		$reviews = reviewAll();
+	} catch (RuntimeException $exception) {
+		$storageAvailable = false;
+		$isLoggedIn = false;
+		http_response_code(503);
+		$status = 'Reviews konden niet veilig worden gelezen. Beheer is uitgeschakeld.';
+		error_log('Reviews could not be read: ' . $exception->getMessage());
+	}
+}
+
+$challenge = $storageAvailable && !$isLoggedIn ? adminChallengeForSession($admin) : null;
 $pendingCount = count(array_filter($reviews, static fn(array $review): bool => ($review['status'] ?? '') === 'pending'));
 ?>
 <!doctype html>
@@ -163,6 +254,7 @@ $pendingCount = count(array_filter($reviews, static fn(array $review): bool => (
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex, nofollow">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -188,19 +280,33 @@ $pendingCount = count(array_filter($reviews, static fn(array $review): bool => (
 				<p class="contact-form-status" role="status"><?= escapeAdmin($status) ?></p>
 			<?php endif; ?>
 
-			<?php if (!$isLoggedIn): ?>
-				<?php if (!adminConfigured()): ?>
-					<p class="reviews-admin-intro">Stel het beheerwachtwoord éénmalig in met de installatiesleutel uit de serveromgeving. Na instellen wordt dit scherm permanent uitgeschakeld.</p>
+			<?php if (!$secureTransport): ?>
+				<p class="reviews-admin-intro">Open deze beheerpagina via HTTPS. Aanmeld- en verificatieformulieren worden via een onbeveiligde verbinding niet getoond.</p>
+			<?php elseif (!$storageAvailable): ?>
+				<p class="reviews-admin-intro">Er zijn geen installatie- of wachtwoordformulieren actief. De opslag moet eerst veilig beschikbaar zijn buiten de publieke webmap.</p>
+			<?php elseif (!$isLoggedIn): ?>
+				<?php if (!$configured): ?>
+					<p class="reviews-admin-intro">We sturen een eenmalige code naar info@legendsontheroad.be om te controleren dat jij de mailbox beheert. De code verloopt na 10 minuten.</p>
+				<?php endif; ?>
+
+				<?php if ($challenge !== null): ?>
 					<form class="contact-form reviews-admin-form" method="post">
 						<input type="hidden" name="csrf_token" value="<?= escapeAdmin($csrf) ?>">
-						<input type="hidden" name="action" value="setup">
-						<label for="setup-key">Eenmalige installatiesleutel</label>
-						<input id="setup-key" name="setup_key" type="password" autocomplete="off" required>
-						<label for="setup-password">Nieuw beheerwachtwoord (minimaal 12 tekens)</label>
-						<input id="setup-password" name="password" type="password" minlength="12" autocomplete="new-password" required>
-						<label for="setup-password-confirmation">Herhaal beheerwachtwoord</label>
-						<input id="setup-password-confirmation" name="password_confirmation" type="password" minlength="12" autocomplete="new-password" required>
-						<button class="home-button" type="submit">Wachtwoord instellen <span aria-hidden="true">›</span></button>
+						<input type="hidden" name="action" value="verify_code">
+						<label for="verification-code">Eenmalige code uit de e-mail</label>
+						<input id="verification-code" name="verification_code" type="text" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" autocomplete="one-time-code" required>
+						<label for="new-password"><?= $configured ? 'Nieuw wachtwoord (minimaal 14 tekens)' : 'Beheerderswachtwoord (minimaal 14 tekens)' ?></label>
+						<input id="new-password" name="password" type="password" minlength="14" autocomplete="new-password" required>
+						<label for="password-confirmation">Herhaal wachtwoord</label>
+						<input id="password-confirmation" name="password_confirmation" type="password" minlength="14" autocomplete="new-password" required>
+						<button class="home-button" type="submit"><?= $configured ? 'Wachtwoord herstellen' : 'Wachtwoord instellen' ?> <span aria-hidden="true">›</span></button>
+					</form>
+					<p class="review-guidance">Een code kan maximaal vijf keer worden geprobeerd. Vraag niet herhaaldelijk nieuwe codes aan.</p>
+				<?php elseif (!$configured): ?>
+					<form class="contact-form reviews-admin-form" method="post">
+						<input type="hidden" name="csrf_token" value="<?= escapeAdmin($csrf) ?>">
+						<input type="hidden" name="action" value="request_code">
+						<button class="home-button" type="submit">Stuur verificatiecode <span aria-hidden="true">›</span></button>
 					</form>
 				<?php else: ?>
 					<form class="contact-form reviews-admin-form" method="post">
@@ -210,6 +316,15 @@ $pendingCount = count(array_filter($reviews, static fn(array $review): bool => (
 						<input id="login-password" name="password" type="password" autocomplete="current-password" required>
 						<button class="home-button" type="submit">Aanmelden <span aria-hidden="true">›</span></button>
 					</form>
+					<details class="reviews-password-reset">
+						<summary>Wachtwoord vergeten?</summary>
+						<p class="reviews-admin-intro">Een herstelcode wordt naar info@legendsontheroad.be gestuurd.</p>
+						<form class="contact-form reviews-admin-form" method="post">
+							<input type="hidden" name="csrf_token" value="<?= escapeAdmin($csrf) ?>">
+							<input type="hidden" name="action" value="request_code">
+							<button class="admin-action" type="submit">Stuur herstelcode</button>
+						</form>
+					</details>
 				<?php endif; ?>
 			<?php else: ?>
 				<div class="reviews-admin-toolbar">
