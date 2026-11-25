@@ -132,7 +132,7 @@ function postedString(string $key): string
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="css/style.css?v=4">
+	<link rel="stylesheet" href="css/style.css?v=5">
 	<title>Deel je ervaring | Legends on the Road</title>
 </head>
 <body class="home-page reviews-page">

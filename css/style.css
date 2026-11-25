@@ -2729,11 +2729,12 @@ p.home-copy {
 
 .review-grid {
 	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-columns: minmax(0, 1fr);
 	grid-auto-flow: row;
 	align-items: stretch;
+	width: min(760px, 100%);
 	gap: 20px;
-	margin-top: 34px;
+	margin: 34px auto 0;
 }
 
 .review-card {
@@ -3194,10 +3195,6 @@ p.home-copy {
 
 	.approved-reviews {
 		padding: 58px 7%;
-	}
-
-	.review-grid {
-		grid-template-columns: 1fr;
 	}
 
 	.review-card {
