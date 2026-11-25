@@ -1468,7 +1468,8 @@ a {
 }
 
 .blossom-partner-card-sinjoor .blossom-partner-logo img {
-	transform: scale(1.2);
+	width: 97%;
+	margin-inline: auto;
 }
 
 .blossom-partner-card h4 {
@@ -1877,6 +1878,11 @@ a {
 
 	.blossom-partner-logo img {
 		height: 110px;
+	}
+
+	.blossom-partner-card-sinjoor .blossom-partner-logo img {
+		width: 203px;
+		max-width: 97%;
 	}
 
 	.blossom-partner-thanks {
