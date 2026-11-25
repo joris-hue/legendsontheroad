@@ -1467,6 +1467,12 @@ a {
 	object-fit: contain;
 }
 
+.blossom-partner-logo-link {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
 .blossom-partner-card-sinjoor .blossom-partner-logo img {
 	width: 97%;
 	margin-inline: auto;
@@ -1477,6 +1483,31 @@ a {
 	font-family: var(--serif);
 	font-size: 23px;
 	font-weight: 600;
+}
+
+.blossom-partner-description {
+	max-width: 290px;
+	margin: 10px auto 0;
+	color: #60665f;
+	font-size: 12px;
+	line-height: 1.8;
+}
+
+.blossom-partner-more {
+	display: inline-block;
+	margin-top: 13px;
+	color: #8a7048;
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.blossom-partner-more:hover {
+	color: #5e4d32;
+	text-decoration: underline;
+	text-underline-offset: 3px;
 }
 
 .blossom-partner-group-community {
