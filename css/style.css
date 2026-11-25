@@ -2473,9 +2473,146 @@ p.home-copy {
 	outline-offset: 2px;
 }
 
+.contact-form textarea {
+	width: 100%;
+	min-height: 170px;
+	padding: 12px;
+	border: 1px solid #c9c3b9;
+	border-radius: 0;
+	background: #fffefa;
+	color: var(--home-forest);
+	font: inherit;
+	font-size: 13px;
+	line-height: 1.7;
+	resize: vertical;
+}
+
+.contact-form textarea:focus-visible,
+.review-consent input:focus-visible,
+.review-stars input:focus-visible + span {
+	outline: 2px solid var(--home-gold);
+	outline-offset: 2px;
+}
+
 .contact-form-optional {
 	color: #77766f;
 	font-weight: 400;
+}
+
+.reviews-section {
+	padding-bottom: 60px;
+}
+
+.reviews-intro {
+	max-width: 600px;
+	margin: -6px 0 30px;
+	color: #626b63;
+	font-size: 13px;
+	line-height: 1.8;
+}
+
+.review-rating {
+	display: grid;
+	gap: 10px;
+	margin: 14px 0 0;
+	padding: 0;
+	border: 0;
+}
+
+.review-rating legend {
+	margin-bottom: 10px;
+	color: var(--home-forest);
+	font-size: 11px;
+	font-weight: 600;
+}
+
+.review-stars {
+	display: flex;
+	gap: 8px;
+}
+
+.review-stars label {
+	display: grid;
+	width: 48px;
+	height: 48px;
+	place-items: center;
+	margin: 0;
+	border: 1px solid #c9c3b9;
+	background: #fffefa;
+	color: var(--home-gold);
+	cursor: pointer;
+}
+
+.review-stars input {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	opacity: 0;
+}
+
+.review-stars label > span[aria-hidden="true"] {
+	font-size: 18px;
+	color: #c9c3b9;
+	line-height: 1;
+}
+
+.review-stars small {
+	color: #626b63;
+	font-size: 9px;
+	line-height: 1;
+}
+
+.review-stars input:checked + span[aria-hidden="true"] {
+	color: var(--home-gold);
+}
+
+.review-guidance {
+	margin: -2px 0 8px;
+	color: #626b63;
+	font-size: 11px;
+	line-height: 1.6;
+}
+
+.review-consent {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	margin: 12px 0 18px !important;
+	font-weight: 400 !important;
+	line-height: 1.7;
+}
+
+.review-consent input {
+	flex: 0 0 auto;
+	width: 17px;
+	height: 17px;
+	min-height: 0;
+	margin: 1px 0 0;
+	accent-color: var(--home-forest);
+}
+
+.approved-reviews {
+	padding: 64px max(7vw, calc((100vw - 1060px) / 2));
+	background: var(--home-paper);
+}
+
+.approved-reviews > div {
+	max-width: 680px;
+	margin: 0 auto;
+}
+
+.approved-reviews h2 {
+	margin: 0 0 15px;
+	font-family: var(--serif);
+	font-size: clamp(32px, 4vw, 46px);
+	font-weight: 500;
+	line-height: 1.05;
+}
+
+.approved-reviews > div > p:last-child {
+	color: #626b63;
+	font-size: 12px;
+	line-height: 1.8;
 }
 
 .contact-form-preview {
