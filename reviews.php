@@ -151,9 +151,9 @@ function postedString(string $key): string
 
 	<main>
 		<section class="contact-form-section reviews-section" aria-labelledby="reviews-title">
-			<p class="home-eyebrow">Jouw verhaal hoort erbij</p>
-			<h1 id="reviews-title">Hoe heb jij het beleefd?</h1>
-			<p class="reviews-intro">Heb je met ons meegereden? We horen graag wat je van de dag, de route en de sfeer vond. Jouw ervaring helpt andere autoliefhebbers om Legends on the Road te ontdekken.</p>
+			<p class="home-eyebrow">Legends on the Road</p>
+			<h1 id="reviews-title">Deel jouw ervaring</h1>
+			<p class="reviews-intro">Elke rondrit vertelt een verhaal. We zijn benieuwd naar dat van jou.</p>
 			<?php if ($status !== ''): ?>
 				<p class="contact-form-status" role="status"><?= escape($status) ?></p>
 			<?php endif; ?>
@@ -170,37 +170,36 @@ function postedString(string $key): string
 				<input id="name" name="name" type="text" maxlength="80" autocomplete="name" value="<?= escape($name) ?>" required>
 
 				<fieldset class="review-rating">
-					<legend>Jouw beoordeling</legend>
+					<legend>Geef jouw beoordeling</legend>
 					<div class="review-stars">
 						<?php for ($score = 1; $score <= 5; $score++): ?>
 							<label>
 								<input type="radio" name="rating" value="<?= $score ?>" aria-label="<?= $score ?> <?= $score === 1 ? 'ster' : 'sterren' ?>"<?= $rating === (string) $score ? ' checked' : '' ?> required>
 								<span aria-hidden="true">★</span>
-								<small aria-hidden="true"><?= $score ?></small>
 								<span class="visually-hidden"><?= $score ?> <?= $score === 1 ? 'ster' : 'sterren' ?></span>
 							</label>
 						<?php endfor; ?>
 					</div>
 				</fieldset>
 
-				<label for="review">Jouw review</label>
-				<textarea id="review" name="review" rows="7" minlength="20" maxlength="2000" required><?= escape($review) ?></textarea>
+				<label for="review">Hoe heb jij onze rondrit beleefd?</label>
+				<textarea id="review" name="review" rows="7" minlength="20" maxlength="2000" placeholder="Jouw verhaal" required><?= escape($review) ?></textarea>
 				<p class="review-guidance">Schrijf minstens 20 tekens. Deel geen gevoelige persoonlijke gegevens.</p>
 
 				<label class="review-consent">
 					<input type="checkbox" name="consent" value="1"<?= $consent ? ' checked' : '' ?> required>
-					<span>Ik geef toestemming om mijn review, na goedkeuring, met mijn naam of voornaam op deze website te publiceren.</span>
+					<span>Ik geef toestemming om mijn review na goedkeuring te publiceren.</span>
 				</label>
 
-				<button class="home-button" type="submit">Verstuur je review <span aria-hidden="true">›</span></button>
+				<button class="home-button" type="submit">Deel mijn ervaring <span aria-hidden="true">→</span></button>
 			</form>
 			<?php endif; ?>
 		</section>
 
 		<section class="approved-reviews" aria-labelledby="approved-reviews-title">
 			<div>
-				<p class="home-eyebrow">Ervaringen van deelnemers</p>
-				<h2 id="approved-reviews-title">Verhalen die we samen beleven.</h2>
+				<p class="home-eyebrow">Woorden van onze deelnemers</p>
+				<h2 id="approved-reviews-title">Samen onderweg, samen genieten.</h2>
 				<?php if ($approvedReviews === []): ?>
 					<p>Reviews verschijnen hier nadat ze zijn goedgekeurd. Bedankt aan iedereen die zijn of haar ervaring met ons deelt.</p>
 				<?php else: ?>
