@@ -1467,6 +1467,10 @@ a {
 	object-fit: contain;
 }
 
+.blossom-partner-card-sinjoor .blossom-partner-logo img {
+	transform: scale(1.2);
+}
+
 .blossom-partner-card h4 {
 	margin: 18px 0 0;
 	font-family: var(--serif);
