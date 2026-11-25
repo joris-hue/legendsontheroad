@@ -1,0 +1,7 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteRule ^data(?:/|$) - [R=404,L]
+	RewriteRule ^review_store\.php$ - [R=404,L]
+</IfModule>
