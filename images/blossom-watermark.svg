@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 720" fill="none">
+	<defs>
+		<linearGradient id="branch" x1="860" y1="430" x2="1040" y2="10" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#aa957f" stop-opacity=".1"/>
+			<stop offset="1" stop-color="#a67e7d" stop-opacity=".25"/>
+		</linearGradient>
+		<radialGradient id="petal">
+			<stop stop-color="#f6e8e4" stop-opacity=".62"/>
+			<stop offset="1" stop-color="#d4aaad" stop-opacity=".24"/>
+		</radialGradient>
+		<radialGradient id="soft-blush">
+			<stop stop-color="#e7c9c7" stop-opacity=".12"/>
+			<stop offset="1" stop-color="#e7c9c7" stop-opacity="0"/>
+		</radialGradient>
+		<g id="blossom">
+			<g fill="url(#petal)" stroke="#b48b8b" stroke-opacity=".22" stroke-width=".8">
+				<path d="M0 0C-13-8-13-24 0-33C13-24 13-8 0 0Z"/>
+				<path d="M0 0C-13-8-13-24 0-33C13-24 13-8 0 0Z" transform="rotate(72)"/>
+				<path d="M0 0C-13-8-13-24 0-33C13-24 13-8 0 0Z" transform="rotate(144)"/>
+				<path d="M0 0C-13-8-13-24 0-33C13-24 13-8 0 0Z" transform="rotate(216)"/>
+				<path d="M0 0C-13-8-13-24 0-33C13-24 13-8 0 0Z" transform="rotate(288)"/>
+			</g>
+			<circle r="2.5" fill="#bba176" fill-opacity=".52"/>
+			<g stroke="#bba176" stroke-linecap="round" stroke-opacity=".34" stroke-width=".7">
+				<path d="M0 0L-3-7M0 0L2-8M0 0L6-5"/>
+			</g>
+		</g>
+	</defs>
+	<g fill="url(#soft-blush)">
+		<circle cx="958" cy="91" r="72"/>
+		<circle cx="923" cy="264" r="62"/>
+		<circle cx="865" cy="357" r="54"/>
+	</g>
+	<g stroke="url(#branch)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+		<path d="M1040-18C1002 40 982 92 964 145S947 231 958 282 944 363 899 428"/>
+		<path d="M988 75C951 72 925 55 905 29"/>
+		<path d="M966 135C1001 122 1021 99 1036 71"/>
+		<path d="M951 200C914 194 886 174 868 146"/>
+		<path d="M956 268C990 249 1010 223 1023 195"/>
+		<path d="M946 331C910 330 883 346 862 373"/>
+		<path d="M922 382C950 387 973 404 988 427"/>
+	</g>
+	<g fill="#89917d" fill-opacity=".17">
+		<path d="M1002 102C1017 83 1037 78 1054 83C1044 99 1025 107 1002 102Z"/>
+		<path d="M952 229C934 213 914 212 898 220C913 234 932 238 952 229Z"/>
+		<path d="M928 350C941 330 960 323 978 326C970 344 951 355 928 350Z"/>
+	</g>
+	<g>
+		<use href="#blossom" transform="translate(1004 58) scale(.86)"/>
+		<use href="#blossom" transform="translate(913 112) scale(.63) rotate(15)"/>
+		<use href="#blossom" transform="translate(899 187) scale(.78) rotate(-12)"/>
+		<use href="#blossom" transform="translate(982 265) scale(.83) rotate(9)"/>
+		<use href="#blossom" transform="translate(866 350) scale(.68) rotate(-17)"/>
+	</g>
+	<g fill="#d4aaa8" fill-opacity=".2">
+		<path d="M848 91C858 84 868 88 871 98C864 106 854 105 848 91Z"/>
+		<path d="M825 278C836 270 846 274 849 284C842 292 832 291 825 278Z"/>
+		<path d="M887 414C897 407 907 411 910 421C903 429 893 428 887 414Z"/>
+	</g>
+</svg>

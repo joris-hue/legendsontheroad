@@ -1246,7 +1246,14 @@ a {
 }
 
 .tour-page {
-	background: var(--paper-light);
+	background-color: var(--paper-light);
+}
+
+.blossom-page {
+	background-image: url("../images/blossom-watermark.svg");
+	background-position: right 72px;
+	background-repeat: no-repeat;
+	background-size: min(96vw, 1000px) auto;
 }
 
 .tour-page .site-navigation {
@@ -2259,6 +2266,10 @@ p.home-copy {
 	gap: clamp(44px, 8vw, 100px);
 	padding-top: 30px;
 	padding-bottom: 100px;
+	background-image: url("../images/blossom-watermark.svg");
+	background-position: right 52%;
+	background-repeat: no-repeat;
+	background-size: min(76vw, 880px) auto;
 }
 
 .home-event-image {
@@ -3142,6 +3153,11 @@ p.home-copy {
 
 	.home-event {
 		gap: 32px;
+		background-size: min(112vw, 460px) auto;
+	}
+
+	.blossom-page {
+		background-size: 700px auto;
 	}
 
 	.home-event-image {
